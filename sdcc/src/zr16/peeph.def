@@ -1,0 +1,465 @@
+replace
+{
+	MOV %1 , 0x00
+	ADD %1 , %2
+}
+by
+{
+	MOV %1 , %2
+}
+
+
+replace
+{
+	MOV %1 , %1
+}
+by
+{}
+
+replace
+{
+	MOV %1 , %2
+	MOV %1 , %2
+}
+by
+{
+	MOV %1 , %2
+}
+
+
+replace
+{
+	MOV %1 , %2
+	MOV %2 , %1
+}
+by
+{
+	MOV %1 , %2
+}
+
+replace
+{
+	MOV	%1 , %2
+	MOV	%3 , %2
+	MOV  %2 , %1 
+}
+by
+{
+	MOV %1 , %2
+	MOV %3 , %2
+}
+
+replace
+{
+	MOV %1 , %2
+	MOV %1 , %2
+}
+by
+{
+	MOV %1 , %2
+}
+
+replace
+{
+	MVS %1 , %2
+	MVS %1 , %2
+}
+by
+{
+	MVS %1 , %2
+}
+
+
+
+
+replace
+{
+	ADD %1 , 0x00
+}
+by
+{}
+
+replace
+{
+	OR %1 , 0x00
+}
+by
+{}
+
+replace
+{
+	OR %1 , 0
+}
+by
+{}
+
+replace
+{
+	AND %1 , 0xFF
+}
+by
+{}
+
+replace 
+{
+	RET
+	RET
+}
+by
+{
+	RET 
+}
+
+replace
+{
+	MOV	R0 , (%1)
+	MOV	%2 , R0
+	MOV	(%3) , %2
+}
+by
+{
+	MOV	R0 , (%1)
+	MOV (%3) , R0
+}
+
+
+replace
+{
+	ADD	%1 , %1
+	MOV  %2 , %1
+	ADD	%1 , %3
+	MOV	%2 , %1
+}
+
+by
+{
+	ADD	%1 , %1
+	ADD	%1 , %3
+	MOV	%2 , %1
+}
+
+replace
+{
+	MOV	 %1 , %2
+	ADD	 %2 , %2
+	ADD	 %2 , %3
+	MOV	 %1 , %2
+}
+by
+{
+	ADD	 %2 , %2
+	ADD	 %2 , %3
+	MOV	 %1 , %2
+}
+
+replace
+{
+	JNZ	%1
+	JMP	%2
+}
+
+by
+{
+	JZ %2
+}
+
+
+replace
+{
+	MOV %1 , %2
+	MOV %2 , %1 
+}
+
+by
+{
+	MOV %1 , %2
+}
+
+
+
+replace
+{
+	ADD %1 , 0
+}
+by
+{}
+
+
+replace
+{
+	SUB %1 , 0
+}
+by
+{}
+
+replace
+{
+	SUB %1 , 0x00
+}
+by
+{}
+
+
+replace
+{
+	AND %1 , 0xFF
+}
+by
+{}
+
+replace 
+{
+	MOV %1 , %2
+	MOV %1 , %2
+}
+by
+{
+	MOV %1 , %2
+}
+
+replace
+{	MOV	%1 , %2
+	MOV	%3 , %4
+	MOV	%2 , %1
+	MOV	%4 , %3
+}
+
+by
+{	
+	MOV	%1 , %2
+	MOV	%3 , %4
+}
+
+
+replace
+{
+%1:
+}
+by
+{
+}if labelRefCount(%1 0)
+
+
+replace
+{
+	MOV	%1 , %2
+	MOV	%3 , %1 
+	MOV	%1 , %2
+}
+by
+{
+	MOV	%1 , %2
+	MOV	%3 , %1
+}
+
+replace
+{
+	MOV	%1 , %2
+	JZ %3
+	MOV	%1 , %2
+}
+by
+{
+	MOV	%1 , %2
+	JZ %3
+}
+
+replace
+{
+	MOV	%1 , (%5)
+	MOV	%2 , %1
+	MOV	%1 , (%6)
+	MOV	%3 , %1
+	MOV	(%4) , %2
+	INC	%4
+	MOV	(%4) , %3
+}
+
+by
+{
+
+	MOV	%1 , (%5)
+	MOV	(%4) , %1
+	INC	%4
+	MOV	%1 , (%6)
+	MOV	(%4) , %1
+}
+
+replace
+{
+	MOV	%1 , (%2)
+	ADD %1 , 0x01
+	ADD	 %1 , %1
+	ADD	 %1 , %5
+	MOV	 %3 , %1
+	MOV	%4 , %3
+	MOV	%1 , (%2)
+	ADD	%1 , %1
+	ADD	%1 , %5
+	MOV	%7 , %1
+	MOV	%6 , %7
+	INC	%6
+	INC	%4
+	CMP	(%6) , (%4)
+	JC	%8
+	JNZ	%9
+	DEC	%6
+	DEC	%4
+	CMP	(%6) , (%4)
+	JC	%8
+}
+
+
+by
+{
+	MOV	%1 , (%2)
+	ADD %1 , 0x01
+	ADD	 %1 , %1
+	ADD	 %1 , %5
+	MOV	%4 , %1
+	MOV	%1 , (%2)
+	ADD	%1 , %1
+	ADD	%1 , %5
+	MOV	%6 , %1
+	INC	%6
+	INC	%4
+	CMP	(%6) , (%4)
+	JC	%8
+	JNZ	%9
+	DEC	%6
+	DEC	%4
+	CMP	(%6) , (%4)
+	JC	%8
+}
+
+
+replace
+{
+	ADD	%1 , %1
+	ADD	%1 , %2
+	MOV	%4 , %1
+	MOV	%3 , %4
+	INC	%3
+	MOV	%1 , (%5)
+	CMP	%1 , (%3)
+	JC	%7
+	JNZ	%8
+	DEC	%3
+	MOV	%1 , (%6)
+	CMP	%1 , (%3)
+}
+
+
+by
+{
+	ADD	%1 , %1
+	ADD	%1 , %2
+	MOV	%3 , %1
+	INC	%3
+	MOV	%1 , (%5)
+	CMP	%1 , (%3)
+	JC	%7
+	JNZ	%8
+	DEC	%3
+	MOV	%1 , (%6)
+	CMP	%1 , (%3)
+}
+
+
+replace
+{
+	MOV	%1 , %2
+	ADD  %1 , %3
+	ADD	%1 , %4
+	MOV	%6 , %1
+	MOV	%1 , %2
+	ADD	%1 , %4
+	MOV	%5 , %1
+}
+
+
+by
+{
+	MOV	%1 , %2
+	ADD	%1 , %4	
+	MOV	%5 , %1
+	ADD  %1 , %3	
+	MOV	%6 , %1
+}
+
+replace
+{
+	MVS	%1 , %3
+	MVS	%2 , %4
+	MOV	(sp) , %2
+	INC	sp
+	MOV	(sp) , %1
+	INC	sp
+	CALL	%5
+	DEC	sp
+}
+
+by
+{
+	MOV	(sp) , %2		
+	INC	sp
+	MOV	(sp) , %1		
+	INC	sp			
+	DEC sp 
+	DEC sp			
+	MVS	%1 , %3
+	MVS	%2 , %4
+	CALL	%5
+	INC sp	
+}
+
+replace
+{
+	MOV	%1 , %2
+	MOV	(sp) , %1
+	INC	sp
+	MVS	%6 , %3
+	MOV	(sp) , %4
+	INC	sp
+	CALL	%5
+	DEC	sp
+}
+by
+{
+	MOV	%1 , %2
+	MOV	(sp) , %1		
+	INC sp			
+	MVS	%6 , %3
+	MOV	(sp) , %4	
+	CALL	%5
+	INC sp
+}
+
+//replace
+//{
+//	CALL %1
+//}
+	
+//by
+//{
+//	MOV R0 , R13		
+//	ADD R0 , 4
+//	MOV (sp) , R0	    
+//	INC sp
+//	JMP %1
+//}
+
+		
+//replace
+//{
+//	ret
+//}
+
+//by
+//{
+//	DEC i_addr
+//	MOV R0 , (sp)
+//	JMP P0 R0
+//}
+
+
